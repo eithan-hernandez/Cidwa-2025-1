@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¿Qué tan Geek eres?</title>
+  <script>
+    async function checkGeek() {
+      const description = document.getElementById('description').value;
+      
+      if (!description) {
+        alert("Por favor, ingresa una descripción.");
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/geek-check', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ description }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert(`¡Tu porcentaje de geek es: ${result.geekPercentage}!\nComentario: ${result.comment}`);
+        } else {
+          alert(result.message || 'Hubo un error');
+        }
+      } catch (error) {
+        alert("Error al conectar con el servidor.");
+        console.error(error);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>¿Qué tan Geek eres?</h1>
+  <p>Ingresa una breve descripción sobre ti, tus gustos, hábitos y habilidades para saber qué tan geek eres.</p>
+  <textarea id="description" placeholder="Escribe aquí tu descripción..."></textarea>
+  <br>
+  <button onclick="checkGeek()">Comprobar Geekness</button>
+</body>
+</html>
